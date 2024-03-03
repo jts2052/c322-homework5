@@ -5,10 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.Random;
 
 @Repository
 public class OrderRepository {
-    private int id = 0;
     public Receipt add(OrderData order) throws Exception {
         Beverage beverage = null;
         switch (order.beverage().toLowerCase()) {
@@ -46,7 +46,9 @@ public class OrderRepository {
                     throw new Exception("Condiment type '%s' is not valid".formatted(condiment));
             }
         }
-        Receipt receipt = new Receipt(id++, beverage.getDescription(), beverage.cost());
+        Random rand = new Random();
+        int id = rand.nextInt(9999);
+        Receipt receipt = new Receipt(id, beverage.getDescription(), beverage.cost());
 
         try (FileWriter fileWriter = new FileWriter("db.txt", true);
              PrintWriter printWriter = new PrintWriter(fileWriter)) {
